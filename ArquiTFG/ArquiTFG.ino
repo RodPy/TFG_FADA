@@ -40,6 +40,7 @@ void setup() {
     clock_prescale_set(clock_div_1);
   #endif
   // END of Trinket-specific code.
+  rainbow(1);
 
 }
 
@@ -75,7 +76,8 @@ void loop() {
   
   // Apagado
   if (digitalRead(BTN_1)){
-    secuenciaLed(0, 0, 0, 10);
+    pixels.setPixelColor(led, pixels.Color(0, 0, 0));
+    pixels.show();   // Send the updated pixel colors to the hardware.
 
     
   }
@@ -105,14 +107,16 @@ void loop() {
     }
 
     else{
-      rainbow(1);
+      secuenciaLed(255, 255, 0, 100);
+
     }
     
   }
 
   // Rayos X
   if (digitalRead(BTN_3)){
-    secuenciaLed(255, 255, 255, 10);
+    pixels.setPixelColor(led, pixels.Color(255, 255, 255));
+    pixels.show();   // Send the updated pixel colors to the hardware.
     
   }
   
