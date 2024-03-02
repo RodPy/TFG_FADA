@@ -15,6 +15,8 @@
 //#define BTN_3     3 // On Trinket or Gemma, suggest changing this to 1
 
 #define LED        5 // On Trinket or Gemma, suggest changing this to 1
+#define LED        8\  // On Trinket or Gemma, suggest changing this to 1
+
 #define sw        4 // On Trinket or Gemma, suggest changing this to 1
 
 #define SENSOR     9 // On Trinket or Gemma, suggest changing this to 1
