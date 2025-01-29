@@ -24,8 +24,8 @@
 #define BTN_2     3 // On Trinket or Gemma, suggest changing this to 1
 #define BTN_3     2 // On Trinket or Gemma, suggest changing this to 1
 // How many NeoPixels are attached to the Arduino?
-#define NUMPIXELS 81 // Popular NeoPixel ring size
-#define NUMPIXELS2 67 // Popular NeoPixel ring size
+#define NUMPIXELS 81 //  APARATO DIGESTIVO Popular NeoPixel ring size
+#define NUMPIXELS2 63 // PARED Popular NeoPixel ring size
 
 Adafruit_NeoPixel pixels(NUMPIXELS, LED, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels2(NUMPIXELS2, LED2, NEO_GRB + NEO_KHZ800);
@@ -58,9 +58,9 @@ void setup() {
   clock_prescale_set(clock_div_1);
 #endif
   // END of Trinket-specific code.
-  rainbow(0.5);
-  rainbow2(0.5);
-
+  // rainbow2(0.1);
+  rainbow(0.1);
+// rainbow3();
 }
 
 int led = 0;
@@ -85,8 +85,8 @@ void secuenciaLed(int R, int G, int B, int timeDelay) {
 
 void secuenciaLed2(int R, int G, int B, int timeDelay) {
 
-  for (int i = 0; i <= NUMPIXELS / 2; i++) {
-    led = NUMPIXELS - i;
+  for (int i = 0; i <= NUMPIXELS2 / 2; i++) {
+    led = NUMPIXELS2 - i;
     pixels2.setPixelColor(i, pixels2.Color(R, G, B));
     pixels2.setPixelColor(led, pixels2.Color(R, G, B));
     pixels2.show();   // Send the updated pixel colors to the hardware.
@@ -96,7 +96,7 @@ void secuenciaLed2(int R, int G, int B, int timeDelay) {
 }
 
 void rainbow(int wait) {
-  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+  for (long firstPixelHue = 0; firstPixelHue <  65536; firstPixelHue += 256) {
     for (int i = 0; i <= NUMPIXELS; i++) {
       int pixelHue = firstPixelHue + (i * 65536L / pixels.numPixels());
       pixels.setPixelColor(i, pixels.gamma32(pixels.ColorHSV(pixelHue)));
@@ -113,10 +113,42 @@ void rainbow2(int wait) {
       pixels2.setPixelColor(i, pixels2.gamma32(pixels2.ColorHSV(pixelHue)));
     }
     pixels2.show();
+    pixels.show();
     delay(wait);
   }
 }
+void rainbow3() {
+  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+    for (int i = 0; i <= NUMPIXELS; i++) {
+      int pixelHue = firstPixelHue + (i * 65536L / pixels2.numPixels());
+      pixels.setPixelColor(i, pixels.gamma32(pixels.ColorHSV(pixelHue)));
 
+      pixels2.setPixelColor(i, pixels2.gamma32(pixels2.ColorHSV(pixelHue)));
+    }
+        pixels.show();
+        pixels2.show();
+        delay(0.1);
+   
+  }
+}
+
+void secuenciaLed4(int R, int G, int B, int timeDelay) {
+
+  for (int i = 0; i <= NUMPIXELS; i++) {
+    led = NUMPIXELS2 - i;
+    pixels.setPixelColor(i, pixels.Color(R, G, B));
+    if (i <=NUMPIXELS2){
+      pixels2.setPixelColor(i, pixels2.Color(R, G, B)); 
+      pixels2.setPixelColor(led, pixels2.Color(R, G, B));
+
+    } 
+    pixels2.show();   // Send the updated pixel colors to the hardware.
+    pixels.show();   // Send the updated pixel colors to the hardware.
+
+    delay(timeDelay); // Pause before next pass through loop
+  }
+
+}
 void loop() {
 
   pixels.clear(); // Set all pixel colors to 'off'
@@ -138,7 +170,9 @@ void loop() {
   if (digitalRead(BTN_2)) {
     Serial.println("BTN_2 ");
     Serial.println(analogRead(0));
-
+    Serial.println("BTN -> ");
+    Serial.print(digitalRead(sw));
+    
     if (digitalRead(sw)) {
       bandera = false;
             Serial.println("false ");
@@ -146,15 +180,16 @@ void loop() {
       if (digitalRead(SENSOR)) {
         Serial.println("sensor ");
 
-        secuenciaLed(0, 150, 0, 100);
+        secuenciaLed4(0, 150, 0, 80);
       }
       else {
         Serial.println("NOsensor ");
 
-        secuenciaLed(150, 0, 0, 100);
+        secuenciaLed4(150, 0, 0, 80);
 
 
       }
+      delay(100);
     }
 
     else {
@@ -166,7 +201,7 @@ void loop() {
       }
       pixels.show();   // Send the updated pixel colors to the hardware.
       pixels2.show();   // Send the updated pixel colors to the hardware.
-      delay(100);
+      delay(2000);
       for (int i = 0; i <= NUMPIXELS; i++) {
         pixels.setPixelColor(i, pixels.Color(0, 0, 0));
         pixels2.setPixelColor(i, pixels.Color(0, 0, 0));
@@ -175,7 +210,7 @@ void loop() {
       pixels.show();   // Send the updated pixel colors to the hardware.
       pixels2.show();   // Send the updated pixel colors to the hardware.
 
-      delay(100);
+      delay(2000);
 
     }
 
